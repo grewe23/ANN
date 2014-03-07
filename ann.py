@@ -93,10 +93,10 @@ tanh_vec = np.vectorize(tanh_prime)
 
 
 def softplus(z):
-    return log(1+exp(z))
+    return log(1+np.exp(z))
 softplus_vec = np.vectorize(softplus)
 def softplus_prime(z):
-    return  1/(1+exp(-z)) 
+    return  1/(1+np.exp(-z)) 
 softplus_prime_vec = np.vectorize(softplus_prime)
 
 
