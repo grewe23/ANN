@@ -84,10 +84,33 @@ class BasicNetwork():
 
 # Numerical functions
 
+def tanh(z):
+    return math.tanh(z)
+tanh_vec = np.vectorize(tanh)
+def tanh_prime(z):
+    return 1.0 - z**2
+tanh_vec = np.vectorize(tanh_prime)
+
+
+def softplus(z):
+    return log(1+exp(z))
+softplus_vec = np.vectorize(softplus)
+def softplus_prime(z):
+    return  1/(1+exp(-z)) 
+softplus_prime_vec = np.vectorize(softplus_prime)
+
+
+def rectifier(z):
+    return max(0,z)
+rect_vec = np.vectorize(rectifier)
+def rectifier_prime(z):
+    return 1*(z>0)
+rectifier_prime_vec = np.vectorize(rectifier_prime)
+
+
 def sigmoid(z):
     return 1.0/(1.0+np.exp(-z))
 sigmoid_vec = np.vectorize(sigmoid)
-
 def sigmoid_prime(z):
     return sigmoid(z)*(1-sigmoid(z))
 sigmoid_prime_vec = np.vectorize(sigmoid_prime)
