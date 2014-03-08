@@ -93,7 +93,7 @@ tanh_vec = np.vectorize(tanh_prime)
 
 
 def softplus(z):
-    return log(1.0+np.exp(z))
+    return np.log(1.0+np.exp(z))
 softplus_vec = np.vectorize(softplus)
 def softplus_prime(z):
     return  1.0/(1.0+np.exp(-z)) 
@@ -101,7 +101,7 @@ softplus_prime_vec = np.vectorize(softplus_prime)
 
 
 def rectifier(z):
-    return max(0,z)
+    return max(0.0,z)
 rect_vec = np.vectorize(rectifier)
 def rectifier_prime(z):
     return 1.0*(z>0)
