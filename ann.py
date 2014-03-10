@@ -82,7 +82,6 @@ class BasicNetwork():
                 nabla_w[-l] += np.dot(delta, activations[-l-1].transpose())
                 
         # Update after looking through all data
-        print nabla_w[0]
         self.weights = [w-eta*nw for w, nw in zip(self.weights, nabla_w)]
         self.biases = [b-eta*nb for b, nb in zip(self.biases, nabla_b)]
             
