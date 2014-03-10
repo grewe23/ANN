@@ -21,5 +21,5 @@ net = BasicNetwork(num_neurons, f=af.tanh_vec, fp=af.tanh_prime_vec)
 net.SGD(training_data,
         epochs=30,          # Number of full passes over training data
         mini_batch_size=10, # Number of samples for a single SGD step
-        eta = 0.2,          # Learning rate
+        eta = 0.5,          # Learning rate
         test_data = test_data)
