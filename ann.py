@@ -3,18 +3,30 @@
 import numpy as np
 import random
 
+import activation_functions as af
+
 class BasicNetwork():
     
-    def __init__(self, sizes):
+    def __init__(self, sizes, f=af.sigmoid_vec, fp=af.sigmoid_prime_vec):
+        '''
+        Initialize a basic feedforward ANN
+        
+        Inputs:
+          - sizes: Number of neurons to use at each layer, e.g. [N1, N2, N3]
+          - f:  Activation function (default: sigmoid). Should be vectorized
+          - fp: Derivative of the activation function
+        '''
         self.num_layers = len(sizes)
         self.sizes = sizes
         self.biases = [np.random.randn(y,1) for y in sizes[1:]]
         self.weights = [np.random.randn(y, x)
                         for x,y in zip(sizes[:-1], sizes[1:])]
+        self.f = f
+        self.fp = fp
                         
     def feedforward(self, a):
         for b, w in zip(self.biases, self.weights):
-            a = sigmoid_vec(np.dot(w,a)+b)
+            a = self.f(np.dot(w,a)+b)
         return a
 
     def SGD(self, training_data, epochs, mini_batch_size, eta,
@@ -51,12 +63,12 @@ class BasicNetwork():
             for b, w in zip(self.biases, self.weights):
                 z = np.dot(w, activation)+b
                 zs.append(z)
-                activation = sigmoid_vec(z)
+                activation = self.f(z)
                 activations.append(activation)
             
             # backward pass
             delta = self._cost_derivative(activations[-1], y) * \
-                sigmoid_prime_vec(zs[-1])
+                self.fp(zs[-1])
             nabla_b[-1] += delta
             nabla_w[-1] += np.dot(delta, activations[-2].transpose())
             
@@ -64,7 +76,7 @@ class BasicNetwork():
             # layer, l=2 is the second-last layer, and so on
             for l in xrange(2, self.num_layers):
                 z = zs[-l]
-                spv = sigmoid_prime_vec(z)
+                spv = self.fp(z)
                 delta = np.dot(self.weights[-l+1].transpose(), delta) * spv
                 nabla_b[-l] += delta
                 nabla_w[-l] += np.dot(delta, activations[-l-1].transpose())
@@ -81,36 +93,3 @@ class BasicNetwork():
                         for (x, y) in test_data]
         return sum(int(x==y) for (x,y) in test_results)
         
-
-# Numerical functions
-
-def tanh(z):
-    return np.tanh(z)
-tanh_vec = np.vectorize(tanh)
-def tanh_prime(z):
-    return 1.0 - np.tanh(z)**2.0
-tanh_vec = np.vectorize(tanh_prime)
-
-
-def softplus(z):
-    return np.log(1.0+np.exp(z))
-softplus_vec = np.vectorize(softplus)
-def softplus_prime(z):
-    return  1.0/(1.0+np.exp(-z)) 
-softplus_prime_vec = np.vectorize(softplus_prime)
-
-
-def rectifier(z):
-    return max(0.0,z)
-rect_vec = np.vectorize(rectifier)
-def rectifier_prime(z):
-    return 1.0*(z>0)
-rectifier_prime_vec = np.vectorize(rectifier_prime)
-
-
-def sigmoid(z):
-    return 1.0/(1.0+np.exp(-z))
-sigmoid_vec = np.vectorize(sigmoid)
-def sigmoid_prime(z):
-    return sigmoid(z)*(1.0-sigmoid(z))
-sigmoid_prime_vec = np.vectorize(sigmoid_prime)
