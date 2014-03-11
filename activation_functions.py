@@ -36,7 +36,7 @@ def rectifier_prime(z):
     return 1.0*(z>0)
 rectifier_prime_vec = np.vectorize(rectifier_prime)
 
-# List functions
+# Dict of functions and their derivatives
 functions = {'sigmoid': (sigmoid_vec, sigmoid_prime_vec),
              'tanh': (tanh_vec, tanh_prime_vec),
             }

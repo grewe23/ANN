@@ -1,9 +1,10 @@
+
 from ann import BasicNetwork
 
 import activation_functions as af
 import mnist_loader
 
-import math
+import shelve
 
 # Load data (see data/README for instructions on downloading MNIST set)
 training_data, validation_data, test_data = \
@@ -21,6 +22,15 @@ params = {'layers': [784, 30, 10],
           'mini_batch_size': 10,
           'eta': 0.5,
          }
+
+# Filename for saving results (via shelve)
+savename = "ann_{}_n{}_ep{}_mb{}_eta{}.db".format(
+                params['af_name'],
+                "-".join([str(n) for n in params['layers']]),
+                params['epochs'],
+                params['mini_batch_size'],
+                "{:.2f}".format(params['eta']).replace('.','-'),
+                )
 
 # Instantiate the network
 net = BasicNetwork(params['layers'],
