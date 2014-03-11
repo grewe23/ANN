@@ -56,4 +56,13 @@ test_results = net.SGD(training_data,
                        eta = params['eta'],
                        test_data = test_data)
 
-print test_results
+# Save results to file
+s = shelve.open(savename)
+try:
+    s['params']  = params
+
+    # Results after SGD
+    s['biases']  = net.biases
+    s['weights'] = net.weights
+finally:
+    s.close()
