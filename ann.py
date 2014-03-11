@@ -1,4 +1,5 @@
 # Bare-bones network
+from __future__ import division
 
 import numpy as np
 import random
@@ -37,6 +38,7 @@ class BasicNetwork():
             
         n = len(training_data)
         
+        test_results = [] # Keep track of test perf over epochs
         for j in xrange(epochs):
             random.shuffle(training_data)
             mini_batches = [
@@ -45,10 +47,14 @@ class BasicNetwork():
             for mini_batch in mini_batches:
                 self.backprop(mini_batch, eta)
             if test_data:
+                n_correct = self.evaluate(test_data)
                 print "Epoch {}: {} / {}".format(
-                    j, self.evaluate(test_data), n_test)
+                    j, n_correct, n_test)
+                test_results.append(n_correct/n_test)
             else:
                 print "Epoch {} complete".format(j)
+
+        return test_results
         
     def backprop(self, training_data, eta):
 

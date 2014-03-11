@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 '''
-Activation functions should be scaled so that the output is in the range [0, 1]
+Activation functions
 '''
 
 def sigmoid(z):
@@ -36,7 +36,13 @@ def rectifier_prime(z):
     return 1.0*(z>0)
 rectifier_prime_vec = np.vectorize(rectifier_prime)
 
+# Dict of functions and their derivatives
+functions = {'sigmoid': (sigmoid_vec, sigmoid_prime_vec),
+             'tanh': (tanh_vec, tanh_prime_vec),
+            }
+
 # Test functions
+#------------------------------------------------------------
 def compare_sigmoid_tanh():
     x = np.linspace(-5,5,100)
     ys = sigmoid_vec(x)
@@ -52,3 +58,4 @@ def show_tanh_derivative():
     plt.plot(x,y,'b')
     plt.plot(x,yp,'r')
     plt.xlim([x[0],x[-1]])
+
