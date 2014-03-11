@@ -58,5 +58,6 @@ test_results = net.SGD(training_data,
 
 # Save results to file (using numpy)
 np.savez(savename, params=params,
+                   test_results=test_results,
                    biases=net.biases,
                    weights=net.weights)
