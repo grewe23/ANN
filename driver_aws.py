@@ -24,7 +24,7 @@ training_data, validation_data, test_data = \
 # - eta: Learning rate
 params = {'layers': [784, 30, 10],
           'af_name': 'sigmoid',
-          'epochs': 3,
+          'epochs': 10,
           'mini_batch_size': 10,
           'eta': 1.0,
          }
