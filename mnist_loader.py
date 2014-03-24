@@ -17,6 +17,8 @@ not already in that directory then you should unzip the file
 import cPickle
 
 # Third-party libraries
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
 import numpy as np
 
 
@@ -79,6 +81,31 @@ def load_data_wrapper():
     test_data = zip(test_inputs, te_d[1])
     return (training_data, validation_data, test_data)
 
+def load_training_data_with_label(label):
+    '''
+    Return training data with a particular label
+    '''
+    tr_d, _, _ = load_data()
+    training_data = [datum for i, datum in enumerate(tr_d[0])
+                            if (tr_d[1][i] == label)]
+    return training_data
+
+def display_training_data(label, num_examples=10):
+    '''
+    Show training data with a particular label as an image
+    '''
+    td = load_training_data_with_label(label)
+    
+    fig, ax = plt.subplots()
+    im = ax.imshow(np.reshape(td[0],(28,28)), cmap=cm.Greys_r)
+    fig.show()
+    
+    for i in xrange(1,min([num_examples, len(td)])):
+        im.set_data(np.reshape(td[i],(28,28)))
+        fig.canvas.draw()
+        plt.pause(0.1)
+        
+        
 def vectorized_result(j):
     """Return a 10-dimensional unit vector with a 1.0 in the jth
     position and zeroes elsewhere.  This is used to convert a digit

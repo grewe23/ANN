@@ -1,4 +1,3 @@
-
 from ann import BasicNetwork
 
 import activation_functions as af
@@ -18,9 +17,9 @@ training_data, validation_data, test_data = \
 # - eta: Learning rate
 params = {'layers': [784, 30, 10],
           'af_name': 'sigmoid',
-          'epochs': 3,
+          'epochs': 30,
           'mini_batch_size': 10,
-          'eta': 0.5,
+          'eta': 1.0,
          }
 
 # Filename for saving results (via shelve)
