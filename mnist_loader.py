@@ -20,6 +20,7 @@ import cPickle
 import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.linalg import svd
 
 
 def load_data():
@@ -81,6 +82,7 @@ def load_data_wrapper():
     test_data = zip(test_inputs, te_d[1])
     return (training_data, validation_data, test_data)
 
+
 def load_training_data_with_label(label):
     '''
     Return training data with a particular label
@@ -89,6 +91,7 @@ def load_training_data_with_label(label):
     training_data = [datum for i, datum in enumerate(tr_d[0])
                             if (tr_d[1][i] == label)]
     return training_data
+
 
 def display_training_data(label, num_examples=10):
     '''
@@ -104,7 +107,39 @@ def display_training_data(label, num_examples=10):
         im.set_data(np.reshape(td[i],(28,28)))
         fig.canvas.draw()
         plt.pause(0.1)
-        
+
+
+def display_pca(M, cov):
+    plt.subplot(1,2,1)
+    plt.imshow(np.reshape(M,(28,28)), cmap=cm.Greys_r)
+    plt.title('Original image')
+    
+    # Perform SVD: cov = U*S*V'
+    #   Note that U == V since cov matrix is symmetric
+    U, s, _ = svd(cov, full_matrices=False)
+    
+    # Sort by descending order of singular values
+    ind = np.argsort(s)[::-1]
+    U = U[:,ind]
+    s = s[ind]
+    
+    plt.subplot(1,2,2)
+    plt.imshow(np.reshape(U[:,0],(28,28)), cmap=cm.Greys_r)
+    plt.title('Image from PCs')
+
+
+def compute_stats_from_examples(examples):
+    num_examples = len(examples)
+    
+    avg_examples = examples[0]
+    cov_examples = np.outer(examples[0], examples[0])
+    for i in xrange(num_examples):
+        avg_examples += examples[i]
+        cov_examples += np.outer(examples[i], examples[i])
+
+    return {'mean': avg_examples / num_examples,
+             'cov':  cov_examples / num_examples}
+
         
 def vectorized_result(j):
     """Return a 10-dimensional unit vector with a 1.0 in the jth
