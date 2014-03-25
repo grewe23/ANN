@@ -6,8 +6,25 @@ import random
 
 import activation_functions as af
 
+class OjaNetwork():
+    '''
+    Classic Oja network (single layer, single output, linear neuron)
+    '''
+    def __init__(self, input_size):
+        self.input_size = input_size
+        self.weights = np.random.randn(input_size)
+        
+    def learn_oja(self, training_data, eta):
+        n = len(training_data)
+        for i in xrange(n):
+            x = training_data[i]
+            y = np.dot(self.weights, x)
+            self.weights += eta/(i+1) * (x*y - y**2 * self.weights)
+
 class BasicNetwork():
-    
+    '''
+    Standard feedforward network with backpropagation
+    '''
     def __init__(self, sizes, f=af.sigmoid_vec, fp=af.sigmoid_prime_vec):
         '''
         Initialize a basic feedforward ANN

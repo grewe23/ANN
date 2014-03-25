@@ -91,7 +91,7 @@ def load_training_data_with_label(label):
     training_data = [datum for i, datum in enumerate(tr_d[0])
                             if (tr_d[1][i] == label)]
     return training_data
-
+    
 
 def display_training_data(label, num_examples=10):
     '''
